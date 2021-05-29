@@ -25,7 +25,7 @@ def main(script, min_age='18', option='pin', locator='734005', dt=datetime.strft
             cowin_info = result.json()
             if cowin_info["sessions"]:
                 for session in cowin_info["sessions"]:
-                    if (session["min_age_limit"] ==  int(min_age) and session["available_capacity_dose1"] >= 0 ):
+                    if (session["min_age_limit"] ==  int(min_age) and session["available_capacity_dose1"] > 0 ):
                         if 'IIT BOMBAY' in session["name"]:
                             print('## Slot open!', session["date"])
                             print('Center Name:', session["name"], session["state_name"], session["pincode"])
