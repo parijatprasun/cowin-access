@@ -38,10 +38,7 @@ def main(script, min_age='18', option='pin', locator='734005', dt=datetime.strft
         else:
             print("No Response from CoWin!")
     
-        limit = datetime.now()+timedelta(minutes=5)
-
-        while datetime.now() < limit:
-            time.sleep(3)
+        time.sleep(3.5)
         print('Next query at:', datetime.now())
 
 if __name__ == '__main__':
