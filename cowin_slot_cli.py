@@ -8,6 +8,7 @@ def main(script, min_age='18', option='pin', locator='734005', dt=datetime.strft
     print('Query starts at', datetime.now())
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'}
     dt_obj = datetime.strptime(dt, '%d-%m-%Y')
+    
     while True:
         dt = datetime.strftime(dt_obj, '%d-%m-%Y')
         if option == 'pin':
