@@ -5,7 +5,7 @@ Accesses public API provided by CoWIN website for tracking of realtime informati
 ## cowin_slot_cli
 
 - Command line interface
-- **Usage:** `cowin_slot_cli.py 18 pin 734005 29-05-2021`
+- **Usage:** `cowin_slot_cli.py pin 734005 18 29-05-2021`
 
 
 ## cowin_slot_gui

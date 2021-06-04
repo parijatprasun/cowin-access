@@ -4,7 +4,7 @@ from datetime import timedelta, datetime
 import time
 from plyer import notification
 
-def main(script, min_age='18', option='pin', locator='734005', dt=datetime.strftime(datetime.today(), '%d-%m-%Y')):
+def main(script, option='pin', locator='734005', min_age='18', dt=datetime.strftime(datetime.today(), '%d-%m-%Y')):
     print('Query starts at', datetime.now())
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'}
     dt_obj = datetime.strptime(dt, '%d-%m-%Y')
