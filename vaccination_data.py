@@ -17,7 +17,7 @@ def main():
     df['daily_count_d1'] = df['people_vaccinated'].diff()
     # for index, row in df.iterrows():
     #     df['daily_count_d1'][index] = df['people_vaccinated'][index] - df['people_vaccinated'][index-1]
-    print(df.tail(10))
+    # print(df.tail(10))
     # print(df.dtypes)
     # print(df.describe())
     last_date = df['date'].iloc[-1]
@@ -38,9 +38,11 @@ def main():
     new_deadline_obj = last_date_obj + timedelta(days=balance_days)
     new_deadline = datetime.strftime(new_deadline_obj, '%d %B %Y')
     last_date_disp = last_date_obj.strftime('%d %B %Y')
+
+    print('India COVID Vaccination Summary')
     print(f'Until {last_date_disp} India vaccinated {single_so_far:,} out of {target_population:,} with only single dose.')
     print(f'India need {balance_population:,} in {duration} days @ {rvr:,} per day.')
-    print(f'Current vaccination rate (last {block} days\' average): {cvr:,} per day.')
+    print(f'Current vaccination rate (last {block} days average): {cvr:,} per day.')
     print(f'India may get only {max_possible:,} and will trail by {trail:,}.')
     print(f'India may reach target population by {new_deadline} at this rate.')
 
