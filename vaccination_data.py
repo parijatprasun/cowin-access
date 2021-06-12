@@ -5,40 +5,38 @@ import matplotlib.pyplot as plt
 # import streamlit as st
  
 def main():
-    # headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'}
-    # pd.set_option('display.max_columns', None, 'display.max_colwidth', None, 'display.max_rows', None)    
     src_url = 'https://github.com/owid/covid-19-data/blob/master/public/data/vaccinations/vaccinations.csv'
     src_ind_url = 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/country_data/India.csv'
 
-    # result = requests.get(src_ind_url, allow_redirects=True)
-    # print(result.status_code)
-    # print(result.content)
     df = pd.read_csv(src_ind_url)
     df['daily_count_d1'] = df['people_vaccinated'].diff()
-    # for index, row in df.iterrows():
-    #     df['daily_count_d1'][index] = df['people_vaccinated'][index] - df['people_vaccinated'][index-1]
+    
     print(df.tail(10))
-    # print(df.dtypes)
-    # print(df.describe())
-    last_date = df['date'].iloc[-1]
-    last_date_obj = datetime.strptime(last_date, '%Y-%m-%d')
-    # print(last_date_obj)
-    deadline = datetime.strptime('31-12-2021', '%d-%m-%Y')
-    duration = (deadline - last_date_obj).days
-    # print(duration)
+    
+    # define date parameters
+    latest_date = df['date'].iloc[-1]
+    latest_date_obj = datetime.strptime(latest_date, '%Y-%m-%d')
+    deadline = '2021-12-31'
+    deadline_obj = datetime.strptime(deadline, '%Y-%m-%d')
+    duration = (deadline_obj - latest_date_obj).days
+    
+    # assign values to variables and calculate rates
     single_so_far = df['people_vaccinated'].iloc[-1]
     target_population = 1000000000
     balance_population = target_population - single_so_far
-    rvr = round(balance_population / duration)
-    block = 10
-    cvr = round(df['daily_count_d1'].tail(block).mean())
+    rvr = round(balance_population / duration)  # required vaccination rate
+    block = 10  # set of days to caluculate the current rate from
+    cvr = round(df['daily_count_d1'].tail(block).mean()) # current vaccination rate
+
+    # calculate forecast numbers 
     max_possible = cvr * duration
     trail = target_population - max_possible
     balance_days = round(balance_population / cvr)
-    new_deadline_obj = last_date_obj + timedelta(days=balance_days)
+    new_deadline_obj = latest_date_obj + timedelta(days=balance_days)
     new_deadline = datetime.strftime(new_deadline_obj, '%d %B %Y')
-    last_date_disp = last_date_obj.strftime('%d %B %Y')
+    last_date_disp = latest_date_obj.strftime('%d %B %Y')
 
+    # display summary information on screen
     print(f'India COVID Vaccination Summary until {last_date_disp}')
     print(f'Vaccinated {single_so_far:,} out of {target_population:,} with only single dose.')
     print(f'Need {balance_population:,} in {duration} days @ {rvr:,} per day.')
@@ -46,12 +44,13 @@ def main():
     print(f'May get only {max_possible:,} and will trail by {trail:,}.')
     print(f'May reach target population by {new_deadline} at this rate.')
 
-    df_projected = pd.DataFrame({'date': [last_date, deadline], 'people_vaccinated': [single_so_far, target_population], 'projected_current': [single_so_far, max_possible]})
-    print(df_projected)
+    df_projected = pd.DataFrame({'date': [deadline], 'people_vaccinated': [target_population], 'projected_current': [max_possible]})
+    # print(df_projected)
 
-    """ # fig = plt.figure(figsize=(16,9), dpi=300, facecolor=None, edgecolor=None, frameon=False)
-    df['daily_count_d1'].plot(x=df['date'], kind='bar', color='orange')
-    df['people_vaccinated'].plot(x=df['date'], secondary_y=True, color='green')
+    """
+    # fig = plt.figure(figsize=(16,9), dpi=300, facecolor=None, edgecolor=None, frameon=False)
+    df2.plot('date', ['people_vaccinated', 'people_fully_vaccinated', 'projected_current'])
+    # df['people_vaccinated'].plot(x=df['date'], secondary_y=True, color='green')
     plt.title('India Vaccination Trend', loc='left', fontname='Arial', fontsize=24, fontweight='bold')
     plt.xlabel('Days', fontname='Arial', fontsize=12, fontweight='bold')
     plt.ylabel('Population', fontname='Arial', fontsize=12, fontweight='bold')
@@ -62,7 +61,8 @@ def main():
     plt.tight_layout()
     plt.show()
     # plt.savefig('file.png')
-    plt.close() """
+    plt.close()
+    """
     
 if __name__ == '__main__':
     main()
