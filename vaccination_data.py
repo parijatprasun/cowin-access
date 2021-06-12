@@ -17,7 +17,7 @@ def main():
     df['daily_count_d1'] = df['people_vaccinated'].diff()
     # for index, row in df.iterrows():
     #     df['daily_count_d1'][index] = df['people_vaccinated'][index] - df['people_vaccinated'][index-1]
-    # print(df.tail(10))
+    print(df.tail(10))
     # print(df.dtypes)
     # print(df.describe())
     last_date = df['date'].iloc[-1]
@@ -45,6 +45,9 @@ def main():
     print(f'Current vaccination rate (last {block} days average): {cvr:,} per day.')
     print(f'May get only {max_possible:,} and will trail by {trail:,}.')
     print(f'May reach target population by {new_deadline} at this rate.')
+
+    df_projected = pd.DataFrame({'date': [last_date, deadline], 'people_vaccinated': [single_so_far, target_population], 'projected_current': [single_so_far, max_possible]})
+    print(df_projected)
 
     """ # fig = plt.figure(figsize=(16,9), dpi=300, facecolor=None, edgecolor=None, frameon=False)
     df['daily_count_d1'].plot(x=df['date'], kind='bar', color='orange')
