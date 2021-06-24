@@ -37,7 +37,7 @@ def main():
     last_date_disp = latest_date_obj.strftime('%d %B %Y')
 
     # display summary information on screen
-    print(f'India COVID Vaccination Summary until {last_date_disp}')
+    print(f'\nIndia COVID Vaccination Summary until {last_date_disp}')
     print(f'Vaccinated {single_so_far:,} out of {target_population:,} with only single dose.')
     print(f'Need {balance_population:,} in {duration} days @ {rvr:,} per day.')
     print(f'Current vaccination rate (last {block} days average): {cvr:,} per day.')
