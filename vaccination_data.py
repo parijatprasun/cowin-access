@@ -45,7 +45,7 @@ def main():
     df_proj_s = pd.Series(projection, index=dts, name='projected_d1')
     df_proj_df = df_proj_s.to_frame()
     df2 = df0.append(df_proj_df)
-    print(df2.tail())
+    # print(df2.tail())
     
     # Display information on screen
     print(f'India COVID Vaccination Summary until {last_date_disp}')
@@ -55,6 +55,7 @@ def main():
     print(f'May get only {max_possible:,} and will trail by {trail:,}.')
     print(f'May reach target population by {new_deadline_disp} at this rate.')
 
+    """"
     story_count = 179172948
     story_cvr = 2566157
     story_rvr = 3931919
@@ -77,6 +78,7 @@ def main():
     print("I'd love to hear from you about your thoughts, feelings, views on this topic through your claps, likes, and comments at the following places -")
     print("twitter.com/parijatprasun")
     print("facebook.com/parijatprasun")
+    """
 
     # Prepare additional data for plotting
     df0 = df.set_index('date')
