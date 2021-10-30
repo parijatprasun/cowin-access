@@ -10,7 +10,8 @@ def main():
 
     # Create dataframe from web URL data
     df = pd.read_csv(src_ind_url)
-    df['daily_d1'] = df['people_vaccinated'].diff()
+    # df['daily_d1'] = df['people_vaccinated'].diff()
+    df['daily_d2'] = df['people_fully_vaccinated'].diff()
     df0 = df.set_index('date')
     print(df0.tail())
     
@@ -29,27 +30,30 @@ def main():
     single_so_far = df['people_vaccinated'].iloc[-1]
     full_so_far = df['people_fully_vaccinated'].iloc[-1]
     target_population = 1000000000
-    balance_population = target_population - single_so_far
+    # balance_population = target_population - single_so_far
+    balance_population = target_population - full_so_far
     rvr = round(balance_population / duration)  # required vaccination rate
     block = 10  # set of days to caluculate the current rate from
-    cvr = round(df['daily_d1'].tail(block).mean()) # current vaccination rate
+    cvr = round(df['daily_d2'].tail(block).mean()) # current vaccination rate
 
     # calculate forecast numbers
-    max_till_now = df['daily_d1'].max()
-    max_possible = single_so_far + cvr * duration
+    max_till_now = df['daily_d2'].max()
+    # max_possible = single_so_far + cvr * duration
+    max_possible = full_so_far + cvr * duration
     trail = target_population - max_possible
     balance_days = round(balance_population / cvr)
     new_deadline_obj = latest_date_obj + timedelta(days=balance_days)
     new_deadline_disp = datetime.strftime(new_deadline_obj, '%d %B %Y')
-    projection = [(single_so_far + period*cvr) for period in range(1,len(dts)+1)] 
-    df_proj_s = pd.Series(projection, index=dts, name='projected_d1')
+    # projection = [(single_so_far + period*cvr) for period in range(1,len(dts)+1)] 
+    projection = [(full_so_far + period*cvr) for period in range(1,len(dts)+1)] 
+    df_proj_s = pd.Series(projection, index=dts, name='projected_d2')
     df_proj_df = df_proj_s.to_frame()
     df2 = df0.append(df_proj_df)
     # print(df2.tail())
     
     # Display information on screen
     print(f'India COVID Vaccination Summary until {last_date_disp}')
-    print(f'Vaccinated {single_so_far:,} out of {target_population:,} with only single dose.')
+    print(f'Vaccinated {full_so_far:,} out of {target_population:,} with only single dose.')
     print(f'Need {balance_population:,} in {duration} days until {deadline_disp} @ {rvr:,} per day.')
     print(f'Current vaccination rate (last {block} days average): {cvr:,} per day.')
     print(f'May get only {max_possible:,} and will trail by {trail:,}.')
@@ -105,7 +109,7 @@ def main():
     # plt.show()
 
     fig2 = plt.figure(figsize=(21,9), dpi=150, facecolor=None, edgecolor=None, frameon=False)
-    plt.bar(df0.index, df0['daily_d1'], color='orange', label='Daily vaccination count')
+    plt.bar(df0.index, df0['daily_d2'], color='orange', label='Daily vaccination count')
     plt.plot(df0['cvr'], color='green', label='CVR')
     plt.plot(df0['rvr'], color='red', label='RVR') 
     plt.title('India Vaccination Trend', loc='left', fontname=font_name, fontsize=40, fontweight='bold')
@@ -126,7 +130,7 @@ def main():
     fig3 = plt.figure(figsize=(21,9), dpi=150, facecolor=None, edgecolor=None, frameon=False)
     plt.plot(df2['people_vaccinated'], label='People vaccinated with one dose')
     plt.plot(df2['people_fully_vaccinated'], label='People vaccinated with two doses')
-    plt.plot(df2['projected_d1'], label='Projection')
+    plt.plot(df2['projected_d2'], label='Projection')
     plt.title('India Vaccination Trend', loc='left', fontname=font_name, fontsize=40, fontweight='bold')
     plt.xlabel('Days', fontname=font_name, fontsize=28, fontweight='bold')
     plt.ylabel('Population', fontname=font_name, fontsize=28, fontweight='bold')
